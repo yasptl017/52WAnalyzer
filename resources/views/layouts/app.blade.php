@@ -124,18 +124,61 @@
         .custom-scrollbar::-webkit-scrollbar-thumb {
             border-radius: 9999px;
         }
+        @media (min-width: 1024px) {
+            #app-sidebar.sidebar-collapsed {
+                transform: translateX(-100%);
+            }
+
+            #application-shell.sidebar-collapsed {
+                padding-left: 0;
+            }
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+<body class="min-h-screen antialiased selection:bg-indigo-500 selection:text-white">
+    <div id="sidebar-backdrop" class="fixed inset-0 z-40 hidden bg-slate-950/50 backdrop-blur-sm lg:hidden" aria-hidden="true"></div>
 
-    <!-- Top Navigation & Header Bar -->
+    <aside id="app-sidebar" class="fixed inset-y-0 left-0 z-50 flex w-72 -translate-x-full flex-col border-r border-slate-200 bg-white/95 shadow-2xl backdrop-blur-xl transition-transform duration-300 dark:border-slate-800 dark:bg-slate-950/95 lg:translate-x-0">
+        <div class="flex h-20 items-center justify-between border-b border-slate-200 px-5 dark:border-slate-800">
+            <a href="{{ route('dashboard') }}" class="flex min-w-0 items-center gap-3 group">
+                <div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-emerald-400 shadow-lg shadow-indigo-500/25">
+                    <svg class="size-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                </div>
+                <span class="min-w-0"><span class="block truncate text-base font-extrabold tracking-tight text-slate-900 dark:text-white">52W<span class="text-indigo-600 dark:text-indigo-400">Analyzer</span></span><span class="block truncate text-[10px] font-medium text-slate-500 dark:text-slate-400">Momentum &amp; Volume Engine</span></span>
+            </a>
+            <button type="button" onclick="toggleSidebar(false)" class="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white lg:hidden" aria-label="Close navigation menu"><svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12" /></svg></button>
+        </div>
+
+        <nav class="custom-scrollbar flex-1 space-y-1 overflow-y-auto px-3 py-5" aria-label="Main navigation">
+            <p class="px-3 pb-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Workspace</p>
+            <a href="{{ route('dashboard') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-semibold transition {{ request()->routeIs('dashboard') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' }}">Dashboard</a>
+            <a href="{{ route('volume-gainers.index') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-semibold transition {{ request()->routeIs('volume-gainers.*') ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' }}">Volume Gainers</a>
+            <a href="{{ route('date-matrix.index') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-semibold transition {{ request()->routeIs('date-matrix.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' }}">Date Matrix</a>
+            <a href="{{ route('re-emergence.index') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-semibold transition {{ request()->routeIs('re-emergence.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' }}">Re-Emergence</a>
+            <a href="{{ route('trading-engine.candidates') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-semibold transition {{ request()->routeIs('trading-engine.*') ? 'bg-violet-600 text-white shadow-md shadow-violet-500/20' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' }}">Trading Engine</a>
+            <a href="{{ route('risk-calculator.index') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-semibold transition {{ request()->routeIs('risk-calculator.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/20' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' }}">Risk Calculator</a>
+            <a href="{{ route('journal.index') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-semibold transition {{ request()->routeIs('journal.*') ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' }}">Trade Journal</a>
+            <a href="{{ route('strategy-simulation.index') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-semibold transition {{ request()->routeIs('strategy-simulation.*') ? 'bg-teal-600 text-white shadow-md shadow-teal-500/20' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' }}">Strategy Simulator</a>
+            <p class="px-3 pt-5 pb-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Account</p>
+            <a href="{{ route('pricing.index') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-bold transition {{ request()->routeIs('pricing.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20' : 'text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-950/40' }}">Pricing &amp; Plans</a>
+            @if(auth()->check() && auth()->user()->isAdmin())
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-bold transition {{ request()->routeIs('admin.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-500/20' : 'text-purple-600 hover:bg-purple-50 dark:text-purple-400 dark:hover:bg-purple-950/40' }}">Admin Panel</a>
+            @endif
+            <a href="{{ route('archives.index') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-semibold transition {{ request()->routeIs('archives.*') ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/20' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' }}">Archives</a>
+        </nav>
+    </aside>
+
+    <div id="application-shell" class="flex min-h-screen flex-col transition-[padding] duration-300 lg:pl-72">
+
+    <!-- Compact header; navigation lives in the collapsible sidebar. -->
     <header class="sticky top-0 z-50 glass-panel border-b border-slate-200 dark:border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 
                 <!-- Brand & Logo -->
                 <div class="flex items-center space-x-3">
-                    <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 group">
+                    <button type="button" onclick="toggleSidebar()" class="rounded-xl border border-slate-200 bg-white/80 p-2 text-slate-600 shadow-sm transition hover:bg-slate-100 dark:border-slate-700/60 dark:bg-slate-800/80 dark:text-slate-300 dark:hover:bg-slate-700/60" aria-label="Open navigation menu" aria-controls="app-sidebar"><svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg></button>
+                    <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 group lg:hidden">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-emerald-400 flex items-center justify-center shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform duration-200">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -152,7 +195,7 @@
                 </div>
 
                 <!-- Navigation Tabs -->
-                <nav class="hidden md:flex items-center space-x-1">
+                <nav class="hidden" aria-hidden="true">
                     <a href="{{ route('dashboard') }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors {{ request()->routeIs('dashboard') ? 'bg-indigo-50 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30' : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60' }}">
                         🔥 Momentum Dashboard
                     </a>
@@ -235,7 +278,7 @@
                         $sysLatestSync = \App\Models\SystemSyncLog::latestSuccessful();
                     @endphp
                     <button onclick="openSystemSyncModal()" 
-                            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/90 dark:bg-slate-800/90 hover:border-indigo-400 dark:hover:border-indigo-500/50 shadow-sm transition text-xs font-semibold text-slate-700 dark:text-slate-200"
+                            class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/90 dark:bg-slate-800/90 hover:border-indigo-400 dark:hover:border-indigo-500/50 shadow-sm transition text-xs font-semibold text-slate-700 dark:text-slate-200"
                             title="View Centralized NSE Data Sync Status">
                         @if($sysMarket['is_trading_day'])
                             <span class="w-2 h-2 rounded-full {{ $sysMarket['is_open'] ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400' }}"></span>
@@ -255,7 +298,7 @@
         </div>
 
         <!-- Mobile Navigation Menu Subbar -->
-        <div class="md:hidden flex overflow-x-auto space-x-2 px-4 py-2 border-t border-slate-200 dark:border-slate-800 custom-scrollbar text-xs font-medium">
+        <div class="hidden" aria-hidden="true">
             <a href="{{ route('dashboard') }}" class="whitespace-nowrap px-3 py-1 rounded {{ request()->routeIs('dashboard') ? 'bg-indigo-600 text-white' : 'text-slate-500 dark:text-slate-400' }}">Dashboard</a>
             <a href="{{ route('volume-gainers.index') }}" class="whitespace-nowrap px-3 py-1 rounded {{ request()->routeIs('volume-gainers.*') ? 'bg-amber-600 text-white' : 'text-slate-500 dark:text-slate-400' }}">Volume Gainers</a>
             <a href="{{ route('date-matrix.index') }}" class="whitespace-nowrap px-3 py-1 rounded {{ request()->routeIs('date-matrix.*') ? 'bg-indigo-600 text-white' : 'text-slate-500 dark:text-slate-400' }}">Date Matrix</a>
@@ -335,8 +378,35 @@
         </div>
     </footer>
 
+    </div>
+
     <!-- Global JavaScript for Live Download Triggers & Theme Toggling -->
     <script>
+        function toggleSidebar(open) {
+            const sidebar = document.getElementById('app-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            const isMobile = window.matchMedia('(max-width: 1023px)').matches;
+
+            if (isMobile) {
+                const shouldOpen = typeof open === 'boolean' ? open : sidebar.classList.contains('-translate-x-full');
+                sidebar.classList.toggle('-translate-x-full', !shouldOpen);
+                backdrop.classList.toggle('hidden', !shouldOpen);
+                document.body.classList.toggle('overflow-hidden', shouldOpen);
+                return;
+            }
+
+            const shell = document.getElementById('application-shell');
+            const shouldOpen = typeof open === 'boolean' ? open : sidebar.classList.contains('sidebar-collapsed');
+            sidebar.classList.toggle('sidebar-collapsed', !shouldOpen);
+            shell.classList.toggle('sidebar-collapsed', !shouldOpen);
+        }
+
+        document.getElementById('sidebar-backdrop').addEventListener('click', () => toggleSidebar(false));
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                toggleSidebar(false);
+            }
+        });
         function toggleTheme() {
             const isDark = document.documentElement.classList.toggle('dark');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
