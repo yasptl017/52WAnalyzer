@@ -191,9 +191,7 @@
                         <div>
                             <span class="text-lg font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
                                 52W<span class="text-indigo-600 dark:text-indigo-400">Analyzer</span>
-                                <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">NSE Real-Time</span>
                             </span>
-                            <span class="text-[11px] text-slate-500 dark:text-slate-400 block -mt-1">Algorithmic Momentum & Volume Engine</span>
                         </div>
                     </a>
                 </div>
