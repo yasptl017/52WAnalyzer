@@ -1,0 +1,17 @@
+# The Laravel project is intentionally deployed as public_html. Forward all
+# requests into Laravel's real public directory so framework files are never
+# reachable from the web.
+
+Options -Indexes
+DirectoryIndex public/index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Preserve certificate-validation paths created by the hosting provider.
+    RewriteRule ^\.well-known(?:/|$) - [L]
+
+    # Let the public directory apply Laravel's normal front-controller rules.
+    RewriteRule ^public(?:/|$) - [L]
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
