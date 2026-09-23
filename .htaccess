@@ -3,13 +3,13 @@
 # reachable from the web.
 
 Options -Indexes
-DirectoryIndex public/index.php
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
     # Preserve certificate-validation paths created by the hosting provider.
     RewriteRule ^\.well-known(?:/|$) - [L]
+    RewriteRule ^$ public/index.php [L]
 
     # Let the public directory apply Laravel's normal front-controller rules.
     RewriteRule ^public(?:/|$) - [L]
