@@ -161,6 +161,10 @@
             <a href="{{ route('strategy-simulation.index') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-semibold transition {{ request()->routeIs('strategy-simulation.*') ? 'bg-teal-600 text-white shadow-md shadow-teal-500/20' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' }}">Strategy Simulator</a>
             <p class="px-3 pt-5 pb-2 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400 dark:text-slate-500">Account</p>
             <a href="{{ route('pricing.index') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-bold transition {{ request()->routeIs('pricing.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20' : 'text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-950/40' }}">Pricing &amp; Plans</a>
+            @guest
+                <a href="{{ route('login') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white">Sign In</a>
+                <a href="{{ route('register') }}" class="flex items-center rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-3 py-2.5 text-sm font-bold text-white shadow-md shadow-emerald-500/20 transition hover:from-emerald-500 hover:to-teal-500">Start Free Trial</a>
+            @endguest
             @if(auth()->check() && auth()->user()->isAdmin())
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center rounded-xl px-3 py-2.5 text-sm font-bold transition {{ request()->routeIs('admin.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-500/20' : 'text-purple-600 hover:bg-purple-50 dark:text-purple-400 dark:hover:bg-purple-950/40' }}">Admin Panel</a>
             @endif
@@ -263,10 +267,10 @@
                             </span>
                         </a>
                     @else
-                        <a href="{{ route('login') }}" class="px-3 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-lg transition">
+                        <a href="{{ route('login') }}" class="hidden lg:inline-flex px-3 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-lg transition">
                             Sign In
                         </a>
-                        <a href="{{ route('register') }}" class="px-3.5 py-1.5 text-xs font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-md shadow-emerald-500/20 transition flex items-center gap-1">
+                        <a href="{{ route('register') }}" class="hidden lg:flex px-3.5 py-1.5 text-xs font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-md shadow-emerald-500/20 transition flex items-center gap-1">
                             <span>🎁</span> Free Trial
                         </a>
                     @endauth
